@@ -51,10 +51,9 @@ namespace UnitTests
             //Act
             LendingDto lending = null;
             LendingDto returnedLending = null;
-            if(isLending)
+            if(isLending && !isLent)
             {
-                if(!isLent)
-                    lending = LendingService.Lend(1, 1);
+                lending = LendingService.Lend(1, 1);
             }
             else
             {
