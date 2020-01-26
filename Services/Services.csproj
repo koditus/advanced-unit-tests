@@ -51,12 +51,12 @@
     <Compile Include="DTOs\IDto.cs" />
     <Compile Include="DTOs\LendingDto.cs" />
     <Compile Include="DTOs\PersonDto .cs" />
-    <Compile Include="Interfaces\IBookEntityService.cs" />
-    <Compile Include="Interfaces\IEntityService.cs" />
-    <Compile Include="Interfaces\ILendingEntityService.cs" />
+    <Compile Include="Interfaces\IBookRepository.cs" />
+    <Compile Include="Interfaces\IRepository.cs" />
+    <Compile Include="Interfaces\ILendingRepository.cs" />
     <Compile Include="Interfaces\ILendingService.cs" />
     <Compile Include="Interfaces\Implementations\LendingService.cs" />
-    <Compile Include="Interfaces\IPersonEntityService.cs" />
+    <Compile Include="Interfaces\IPersonRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

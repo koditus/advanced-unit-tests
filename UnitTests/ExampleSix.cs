@@ -15,21 +15,21 @@ namespace UnitTests
         {
             //Arrange
             if(isLent || isReturned)
-                LendingService.Lend(1, 1);
+                LendingService.Lend(ValidBookId, ValidPersonId);
 
             if(isReturned)
-                LendingService.Return(1);
+                LendingService.Return(ValidBookId);
 
             //Act
             Exception exception = null;
             if(isLending && isLent)
             {
-                exception = Assert.Throws<InvalidOperationException>(() => LendingService.Lend(1, 1));
+                exception = Assert.Throws<InvalidOperationException>(() => LendingService.Lend(ValidBookId, ValidPersonId));
             }
             else
             {
                 if (isReturned || !isLent)
-                    exception = Assert.Throws<InvalidOperationException>(() => LendingService.Return(1));
+                    exception = Assert.Throws<InvalidOperationException>(() => LendingService.Return(ValidBookId));
             }
 
             //Assert
@@ -42,10 +42,10 @@ namespace UnitTests
         {
             //Arrange
             if (isLent || isReturned)
-                LendingService.Lend(1, 1);
+                LendingService.Lend(ValidBookId, ValidPersonId);
 
             if (isReturned)
-                LendingService.Return(1);
+                LendingService.Return(ValidBookId);
 
             //Act
             LendingDto lending = null;
@@ -53,20 +53,20 @@ namespace UnitTests
             if (isLending)
             {
                 if (!isLent)
-                    lending = LendingService.Lend(1, 1);
+                    lending = LendingService.Lend(ValidBookId, ValidPersonId);
             }
             else
             {
                 if (!isReturned || isLent)
-                    returnedLending = LendingService.Return(1);
+                    returnedLending = LendingService.Return(ValidBookId);
             }
 
             //Assert
             if (isLending)
             {
                 Assert.IsNotNull(lending);
-                Assert.AreEqual(1, lending.Book.Id);
-                Assert.AreEqual(1, lending.Person.Id);
+                Assert.AreEqual(ValidBookId, lending.Book.Id);
+                Assert.AreEqual(ValidPersonId, lending.Person.Id);
                 Assert.IsNotNull(lending.StartDate);
             }
             else

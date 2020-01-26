@@ -10,10 +10,10 @@ namespace UnitTests
         public void GivenBookAlreadyLent_WhenReturning_ThenBookGetsReturned()
         {
             //Arrange
-            LendingService.Lend(1, 1);
+            LendingService.Lend(ValidBookId, ValidPersonId);
 
             //Act
-            var returnedLending = LendingService.Return(1);
+            var returnedLending = LendingService.Return(ValidBookId);
 
             //Assert
             Assert.IsNotNull(returnedLending);
@@ -24,11 +24,11 @@ namespace UnitTests
         public void GivenReturnedBook_WhenReturning_ThenGetException()
         {
             //Arrange
-            LendingService.Lend(1, 1);
-            LendingService.Return(1);
+            LendingService.Lend(ValidBookId, ValidPersonId);
+            LendingService.Return(ValidBookId);
 
             //Act
-            var exception = Assert.Throws<InvalidOperationException>(() => LendingService.Return(1));
+            var exception = Assert.Throws<InvalidOperationException>(() => LendingService.Return(ValidBookId));
 
             //Assert
             Assert.That(exception, Is.TypeOf(typeof(InvalidOperationException)));
@@ -40,7 +40,7 @@ namespace UnitTests
             //Arrange
 
             //Act
-            var exception = Assert.Throws<InvalidOperationException>(() => LendingService.Return(1));
+            var exception = Assert.Throws<InvalidOperationException>(() => LendingService.Return(ValidBookId));
 
             //Assert
             Assert.That(exception, Is.TypeOf(typeof(InvalidOperationException)));

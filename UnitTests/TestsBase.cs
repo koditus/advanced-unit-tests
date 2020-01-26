@@ -12,19 +12,23 @@ namespace UnitTests
     {
         protected LendingService LendingService;
         protected List<LendingDto> Lendings = new List<LendingDto>();
-        protected Mock<ILendingEntityService> MockLendingEntityService;
-        protected Mock<IBookEntityService> MockBookEntityService;
-        protected Mock<IPersonEntityService> MockPersonEntityService;
+        protected Mock<ILendingRepository> MockLendingRepository;
+        protected Mock<IBookRepository> MockBookRepository;
+        protected Mock<IPersonRepository> MockPersonRepository;
+        protected int ValidBookId = 1;
+        protected int InvalidBookId = 6;
+        protected int ValidPersonId = 1;
+        protected int InvalidPersonId = 6;
 
         [SetUp]
         public void SetUp()
         {
-            MockLendingEntityService = new Mock<ILendingEntityService>();
-            MockLendingEntityService.Setup(s => s.GetAll()).Returns(() => Lendings.ToArray());
-            MockLendingEntityService.Setup(s => s.Add(It.IsAny<LendingDto>()))
+            MockLendingRepository = new Mock<ILendingRepository>();
+            MockLendingRepository.Setup(s => s.GetAll()).Returns(() => Lendings.ToArray());
+            MockLendingRepository.Setup(s => s.Add(It.IsAny<LendingDto>()))
                 .Callback<LendingDto>(l => Lendings.Add(l))
                 .Returns((LendingDto parameter) => parameter);
-            MockLendingEntityService.Setup(s => s.Update(It.IsAny<LendingDto>()))
+            MockLendingRepository.Setup(s => s.Update(It.IsAny<LendingDto>()))
                 .Callback<LendingDto>(parameter =>
                 {
                     Lendings.RemoveAll(l => l.Id == parameter.Id);
@@ -32,29 +36,29 @@ namespace UnitTests
                 })
                 .Returns<LendingDto>(parameter => Lendings.First(l => l.Id == parameter.Id));
 
-            MockBookEntityService = new Mock<IBookEntityService>();
-            MockBookEntityService.Setup(s => s.GetOne(It.IsInRange(1, 5, Range.Inclusive)))
+            MockBookRepository = new Mock<IBookRepository>();
+            MockBookRepository.Setup(s => s.GetOne(ValidBookId))
                 .Returns((int parameter) => new BookDto { Id = parameter });
-            MockBookEntityService.Setup(s => s.GetOne(It.IsInRange(6, 10, Range.Inclusive)))
+            MockBookRepository.Setup(s => s.GetOne(InvalidBookId))
                 .Returns<BookDto>(null);
 
-            MockPersonEntityService = new Mock<IPersonEntityService>();
-            MockPersonEntityService.Setup(s => s.GetOne(It.IsInRange(1, 5, Range.Inclusive)))
+            MockPersonRepository = new Mock<IPersonRepository>();
+            MockPersonRepository.Setup(s => s.GetOne(ValidPersonId))
                 .Returns((int parameter) => new PersonDto { Id = parameter });
-            MockPersonEntityService.Setup(s => s.GetOne(It.IsInRange(6, 10, Range.Inclusive)))
+            MockPersonRepository.Setup(s => s.GetOne(InvalidPersonId))
                 .Returns<PersonDto>(null);
 
-            LendingService = new LendingService(MockLendingEntityService.Object, MockBookEntityService.Object,
-                MockPersonEntityService.Object);
+            LendingService = new LendingService(MockLendingRepository.Object, MockBookRepository.Object,
+                MockPersonRepository.Object);
         }
 
         [TearDown]
         public void TearDown()
         {
             LendingService = null;
-            MockLendingEntityService = null;
-            MockBookEntityService = null;
-            MockPersonEntityService = null;
+            MockLendingRepository = null;
+            MockBookRepository = null;
+            MockPersonRepository = null;
             Lendings = new List<LendingDto>();
         }
     }

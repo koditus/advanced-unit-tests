@@ -6,29 +6,29 @@ namespace Services.Interfaces.Implementations
 {
     public class LendingService : ILendingService
     {
-        private readonly ILendingEntityService _lendingEntityService;
-        private readonly IBookEntityService _bookEntityService;
-        private readonly IPersonEntityService _personEntityService;
+        private readonly ILendingRepository _lendingRepository;
+        private readonly IBookRepository _bookRepository;
+        private readonly IPersonRepository _personRepository;
 
-        public LendingService(ILendingEntityService lendingEntityService,
-            IBookEntityService bookEntityService, IPersonEntityService personEntityService)
+        public LendingService(ILendingRepository lendingRepository,
+            IBookRepository bookRepository, IPersonRepository personRepository)
         {
-            _lendingEntityService = lendingEntityService;
-            _bookEntityService = bookEntityService;
-            _personEntityService = personEntityService;
+            _lendingRepository = lendingRepository;
+            _bookRepository = bookRepository;
+            _personRepository = personRepository;
         }
 
         public LendingDto Lend(int bookId, int personId)
         {
-            var book = _bookEntityService.GetOne(bookId);
+            var book = _bookRepository.GetOne(bookId);
             if(book == null)
                 throw new InvalidOperationException($"Book not found! BookId: {bookId}");
 
-            var person = _personEntityService.GetOne(personId);
+            var person = _personRepository.GetOne(personId);
             if(person == null)
                 throw new InvalidOperationException($"Person not found! PersonId: {personId}");
 
-            var allLendings = _lendingEntityService.GetAll();
+            var allLendings = _lendingRepository.GetAll();
             var lending = allLendings.FirstOrDefault(l => l.Book.Id == bookId);
             if (lending != null && lending.EndDate == null)
                 throw new InvalidOperationException($"Book is already lent!");
@@ -40,13 +40,13 @@ namespace Services.Interfaces.Implementations
                 Person = person,
                 StartDate = DateTime.UtcNow
             };
-            _lendingEntityService.Add(newLending);
+            _lendingRepository.Add(newLending);
             return newLending;
         }
 
         public LendingDto Return(int bookId)
         {
-            var allLendings = _lendingEntityService.GetAll();
+            var allLendings = _lendingRepository.GetAll();
             var lending = allLendings.FirstOrDefault(l => l.Book.Id == bookId && l.EndDate == null);
             if (lending == null)
                 throw new InvalidOperationException($"Book with id: {bookId} is not lent!");
@@ -55,7 +55,7 @@ namespace Services.Interfaces.Implementations
                 throw new InvalidOperationException($"Book with id: {bookId} is not lent!");
 
             lending.EndDate = DateTime.UtcNow;
-            _lendingEntityService.Update(lending);
+            _lendingRepository.Update(lending);
             return lending;
         }
     }

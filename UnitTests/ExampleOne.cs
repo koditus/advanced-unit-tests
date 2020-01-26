@@ -12,12 +12,12 @@ namespace UnitTests
             //Arrange
 
             //Act
-            var lending = LendingService.Lend(1, 1);
+            var lending = LendingService.Lend(ValidBookId, ValidPersonId);
 
             //Assert
             Assert.IsNotNull(lending);
-            Assert.AreEqual(1, lending.Book.Id);
-            Assert.AreEqual(1, lending.Person.Id);
+            Assert.AreEqual(ValidBookId, lending.Book.Id);
+            Assert.AreEqual(ValidPersonId, lending.Person.Id);
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace UnitTests
             //Arrange
 
             //Act
-            var exception = Assert.Throws<InvalidOperationException>(() => LendingService.Lend(6, 6));
+            var exception = Assert.Throws<InvalidOperationException>(() => LendingService.Lend(InvalidBookId, InvalidPersonId));
 
             //Assert
             Assert.That(exception, Is.TypeOf(typeof(InvalidOperationException)));

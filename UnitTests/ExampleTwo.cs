@@ -12,8 +12,8 @@ namespace UnitTests
             //Arrange
 
             //Act
-            LendingService.Lend(1, 1);
-            var exception = Assert.Throws<InvalidOperationException>(() => LendingService.Lend(1, 1));
+            LendingService.Lend(ValidBookId, ValidPersonId);
+            var exception = Assert.Throws<InvalidOperationException>(() => LendingService.Lend(ValidBookId, ValidPersonId));
 
             //Assert
             Assert.That(exception, Is.TypeOf(typeof(InvalidOperationException)));
@@ -26,7 +26,7 @@ namespace UnitTests
             //Arrange
 
             //Act
-            var exception = Assert.Throws<InvalidOperationException>(() => LendingService.Lend(6, 1));
+            var exception = Assert.Throws<InvalidOperationException>(() => LendingService.Lend(InvalidBookId, ValidPersonId));
 
             //Assert
             Assert.That(exception, Is.TypeOf(typeof(InvalidOperationException)));
@@ -38,7 +38,7 @@ namespace UnitTests
             //Arrange
 
             //Act
-            var exception = Assert.Throws<InvalidOperationException>(() => LendingService.Lend(1, 6));
+            var exception = Assert.Throws<InvalidOperationException>(() => LendingService.Lend(ValidBookId, InvalidPersonId));
 
             //Assert
             Assert.That(exception, Is.TypeOf(typeof(InvalidOperationException)));

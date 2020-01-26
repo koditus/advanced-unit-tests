@@ -3,7 +3,7 @@ using Services.DTOs;
 
 namespace Services.Interfaces
 {
-    public interface IBookEntityService : IEntityService<BookDto, BookDao>
+    public interface ILendingRepository : IRepository<LendingDto, LendingDao>
     {
     }
 }

@@ -3,7 +3,7 @@ using Services.DTOs;
 
 namespace Services.Interfaces
 {
-    public interface ILendingEntityService : IEntityService<LendingDto, LendingDao>
+    public interface IPersonRepository : IRepository<PersonDto, PersonDao>
     {
     }
 }
