@@ -11,7 +11,10 @@ namespace UnitTests
     public class TestsBase
     {
         protected LendingService LendingService;
-        protected List<LendingDto> Lendings = new List<LendingDto>();
+
+        protected List<LendingDto> Lendings = new List<LendingDto>
+            {new LendingDto {Book = new BookDto {Id = 7}, EndDate = null, Id = 1, Person = new PersonDto {Id = 1}}};
+
         protected Mock<ILendingRepository> MockLendingRepository;
         protected Mock<IBookRepository> MockBookRepository;
         protected Mock<IPersonRepository> MockPersonRepository;
@@ -19,6 +22,8 @@ namespace UnitTests
         protected int InvalidBookId = 6;
         protected int ValidPersonId = 1;
         protected int InvalidPersonId = 6;
+        protected int LentBookId = 7;
+        protected int ReturnedBookId = 8;
 
         [SetUp]
         public void SetUp()
@@ -38,13 +43,17 @@ namespace UnitTests
 
             MockBookRepository = new Mock<IBookRepository>();
             MockBookRepository.Setup(s => s.GetOne(ValidBookId))
+                .Returns((int parameter) => new BookDto {Id = parameter});
+            MockBookRepository.Setup(s => s.GetOne(LentBookId))
+                .Returns((int parameter) => new BookDto { Id = parameter });
+            MockBookRepository.Setup(s => s.GetOne(ReturnedBookId))
                 .Returns((int parameter) => new BookDto { Id = parameter });
             MockBookRepository.Setup(s => s.GetOne(InvalidBookId))
                 .Returns<BookDto>(null);
 
             MockPersonRepository = new Mock<IPersonRepository>();
             MockPersonRepository.Setup(s => s.GetOne(ValidPersonId))
-                .Returns((int parameter) => new PersonDto { Id = parameter });
+                .Returns((int parameter) => new PersonDto {Id = parameter});
             MockPersonRepository.Setup(s => s.GetOne(InvalidPersonId))
                 .Returns<PersonDto>(null);
 
@@ -59,7 +68,20 @@ namespace UnitTests
             MockLendingRepository = null;
             MockBookRepository = null;
             MockPersonRepository = null;
-            Lendings = new List<LendingDto>();
+            Lendings = new List<LendingDto>
+                {new LendingDto {Book = new BookDto {Id = 7}, EndDate = null, Id = 1, Person = new PersonDto {Id = 1}}};
+        }
+
+        protected void VerifyMocks(int bookRepoCalledTimes, int personRepoCalledTimes, int lendingRepoGetAllCalledTimes,
+            int lendingRepoAddCalledTimes, int lendingRepoUpdateCalledTimes)
+        {
+            MockBookRepository.Verify(mock => mock.GetOne(It.IsAny<int>()), Times.Exactly(bookRepoCalledTimes));
+            MockPersonRepository.Verify(mock => mock.GetOne(It.IsAny<int>()), Times.Exactly(personRepoCalledTimes));
+            MockLendingRepository.Verify(mock => mock.GetAll(), Times.Exactly(lendingRepoGetAllCalledTimes));
+            MockLendingRepository.Verify(mock => mock.Add(It.IsAny<LendingDto>()),
+                Times.Exactly(lendingRepoAddCalledTimes));
+            MockLendingRepository.Verify(mock => mock.Update(It.IsAny<LendingDto>()),
+                Times.Exactly(lendingRepoUpdateCalledTimes));
         }
     }
 }

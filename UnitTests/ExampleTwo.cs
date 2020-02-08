@@ -16,6 +16,7 @@ namespace UnitTests
 
             //Assert
             Assert.Throws<InvalidOperationException>(() => LendingService.Lend(ValidBookId, ValidPersonId));
+            VerifyMocks(2, 2, 2, 1, 0);
         }
 
 
@@ -26,6 +27,7 @@ namespace UnitTests
 
             //Act / Assert
             Assert.Throws<InvalidOperationException>(() => LendingService.Lend(InvalidBookId, ValidPersonId));
+            VerifyMocks(1, 0, 0, 0, 0);
         }
 
         [Test]
@@ -35,6 +37,7 @@ namespace UnitTests
 
             //Act / Assert
             Assert.Throws<InvalidOperationException>(() => LendingService.Lend(ValidBookId, InvalidPersonId));
+            VerifyMocks(1, 1, 0, 0, 0);
         }
 
     }

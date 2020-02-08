@@ -1,6 +1,5 @@
 ﻿using System;
 using NUnit.Framework;
-using Services.DTOs;
 
 namespace UnitTests
 {
@@ -8,72 +7,55 @@ namespace UnitTests
     public class ExampleSeven : TestsBase
     {
         [Test, Sequential]
-        public void GivenBookStatus_WhenPerformingAction_ThenActionIsPerformedWithValidations(
-            [Values(false, false, true)] bool isLent, [Values(true, false, false)] bool isReturned,
-            [Values(false, false, true)] bool isLending)
+        public void GivenInvalidBookOrPerson_WhenLending_ThenValidations(
+            [Values(1, 6, 7, 8)] int bookId, [Values(6, 1, 1, 6)] int personId)
         {
             //Arrange
-            if(isLent || isReturned)
-                LendingService.Lend(ValidBookId, ValidPersonId);
 
-            if(isReturned)
-                LendingService.Return(ValidBookId);
-
-            //Act
-            Exception exception = null;
-            if(isLending && isLent)
-            {
-                exception = Assert.Throws<InvalidOperationException>(() => LendingService.Lend(ValidBookId, ValidPersonId));
-            }
-            else
-            {
-                if(isReturned || !isLent)
-                    exception = Assert.Throws<InvalidOperationException>(() => LendingService.Return(ValidBookId));
-            }
-
-            //Assert
-            Assert.That(exception, Is.TypeOf(typeof(InvalidOperationException)));
+            //Act / Assert
+            Assert.Throws<InvalidOperationException>(() => LendingService.Lend(bookId, personId));
         }
 
         [Test, Sequential]
-        [TestCase(true, false, false)]
-        public void GivenBookStatus_WhenPerformingReturnAction_ThenActionIsPerformedWithValidations(
-            [Values(true)] bool isLent,
-            [Values(false)] bool isReturned, [Values(false)] bool isLending)
+        public void GivenValidBookAndPerson_WhenLending_ThenLent([Values(1, 8)] int bookId, [Values(1, 1)] int personId)
         {
             //Arrange
-            if(isLent || isReturned)
-                LendingService.Lend(ValidBookId, ValidPersonId);
-
-            if(isReturned)
-                LendingService.Return(ValidBookId);
 
             //Act
-            LendingDto lending = null;
-            LendingDto returnedLending = null;
-            if(isLending && !isLent)
-            {
-                lending = LendingService.Lend(ValidBookId, ValidPersonId);
-            }
-            else
-            {
-                if(!isReturned || isLent)
-                    returnedLending = LendingService.Return(ValidBookId);
-            }
+            var lending = LendingService.Lend(bookId, personId);
 
             //Assert
-            if(isLending)
-            {
-                Assert.IsNotNull(lending);
-                Assert.AreEqual(ValidBookId, lending.Book.Id);
-                Assert.AreEqual(ValidPersonId, lending.Person.Id);
-                Assert.IsNotNull(lending.StartDate);
-            }
-            else
-            {
-                Assert.IsNotNull(returnedLending);
-                Assert.IsNotNull(returnedLending.EndDate);
-            }
+            Assert.IsNotNull(lending);
+            Assert.IsNotNull(lending);
+            Assert.AreEqual(bookId, lending.Book.Id);
+            Assert.AreEqual(personId, lending.Person.Id);
+            Assert.IsNotNull(lending.StartDate);
+            Assert.IsNull(lending.EndDate);
+        }
+
+        [Test, Sequential]
+        public void GivenInvalidBooksForReturn_WhenReturning_ThenValidations([Values(1, 6, 8)] int bookId)
+        {
+            //Arrange
+
+            //Act / Assert
+            Assert.Throws<InvalidOperationException>(() => LendingService.Return(bookId));
+        }
+
+        [Test, Sequential]
+        public void GivenLentBook_WhenReturning_ThenBookReturned([Values(7)] int bookId)
+        {
+            //Arrange
+
+            //Act / Assert
+            var lending = LendingService.Return(bookId);
+
+            //Assert
+            Assert.IsNotNull(lending);
+            Assert.AreEqual(bookId, lending.Book.Id);
+            Assert.AreEqual(ValidPersonId, lending.Person.Id);
+            Assert.IsNotNull(lending.StartDate);
+            Assert.IsNotNull(lending.EndDate);
         }
     }
 }

@@ -18,6 +18,7 @@ namespace UnitTests
             //Assert
             Assert.IsNotNull(returnedLending);
             Assert.IsNotNull(returnedLending.EndDate);
+            VerifyMocks(1, 1, 2, 1, 1);
         }
 
         [Test]
@@ -29,6 +30,7 @@ namespace UnitTests
 
             //Act / Assert
             Assert.Throws<InvalidOperationException>(() => LendingService.Return(ValidBookId));
+            VerifyMocks(1, 1, 3, 1, 1);
         }
 
         [Test]
@@ -38,6 +40,7 @@ namespace UnitTests
 
             //Act / Assert
             Assert.Throws<InvalidOperationException>(() => LendingService.Return(ValidBookId));
+            VerifyMocks(0, 0, 1, 0, 0);
         }
 
     }

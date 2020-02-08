@@ -16,6 +16,7 @@ namespace UnitTests
 
             //Act / Assert
             Assert.Throws<InvalidOperationException>(() => LendingService.Lend(bookId, personId));
+            VerifyMocks(1, bookId == 6 ? 0 : 1, 0, 0, 0);
         }
 
         [Test]
@@ -32,6 +33,7 @@ namespace UnitTests
             Assert.IsNotNull(lending);
             Assert.AreEqual(1, lending.Book.Id);
             Assert.AreEqual(1, lending.Person.Id);
+            VerifyMocks(1, 1, 1, 1, 0);
         }
     }
 }
