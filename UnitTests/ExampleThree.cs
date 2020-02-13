@@ -16,8 +16,8 @@ namespace UnitTests
             var returnedLending = LendingService.Return(ValidBookId);
 
             //Assert
-            Assert.IsNotNull(returnedLending);
-            Assert.IsNotNull(returnedLending.EndDate);
+            AssertBookReturned(returnedLending, ValidBookId, ValidPersonId);
+
             VerifyBookRepository_GetOne_IsCalled(1);
             VerifyPersonRepository_GetOne_IsCalled(1);
             VerifyLendingRepository_GetAll_IsCalled(2);
@@ -34,6 +34,7 @@ namespace UnitTests
 
             //Act / Assert
             Assert.Throws<InvalidOperationException>(() => LendingService.Return(ValidBookId));
+
             VerifyBookRepository_GetOne_IsCalled(1);
             VerifyPersonRepository_GetOne_IsCalled(1);
             VerifyLendingRepository_GetAll_IsCalled(3);
@@ -48,11 +49,10 @@ namespace UnitTests
 
             //Act / Assert
             Assert.Throws<InvalidOperationException>(() => LendingService.Return(ValidBookId));
-            VerifyBookRepository_GetOne_IsCalled(0);
-            VerifyPersonRepository_GetOne_IsCalled(0);
+
             VerifyLendingRepository_GetAll_IsCalled(1);
-            VerifyLendingRepository_Add_IsCalled(0);
-            VerifyLendingRepository_Update_IsCalled(0);
+
+            VerifyNoOtherCalls();
         }
 
     }

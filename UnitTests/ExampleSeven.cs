@@ -27,11 +27,7 @@ namespace UnitTests
             var lending = LendingService.Lend(bookId, personId);
 
             //Assert
-            Assert.IsNotNull(lending);
-            Assert.AreEqual(bookId, lending.Book.Id);
-            Assert.AreEqual(personId, lending.Person.Id);
-            Assert.IsNotNull(lending.StartDate);
-            Assert.IsNull(lending.EndDate);
+            AssertBookLent(lending, bookId, personId);
         }
 
         [Test, Sequential]
@@ -52,11 +48,7 @@ namespace UnitTests
             var lending = LendingService.Return(bookId);
 
             //Assert
-            Assert.IsNotNull(lending);
-            Assert.AreEqual(bookId, lending.Book.Id);
-            Assert.AreEqual(ValidPersonId, lending.Person.Id);
-            Assert.IsNotNull(lending.StartDate);
-            Assert.IsNotNull(lending.EndDate);
+            AssertBookReturned(lending, bookId, ValidPersonId);
         }
     }
 }

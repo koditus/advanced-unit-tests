@@ -72,6 +72,34 @@ namespace UnitTests
                 {new LendingDto {Book = new BookDto {Id = 7}, EndDate = null, Id = 1, Person = new PersonDto {Id = 1}}};
         }
 
+        protected void AssertBookIsValid(LendingDto lending, int bookId, int personId)
+        {
+            Assert.IsNotNull(lending);
+            Assert.AreEqual(bookId, lending.Book.Id);
+            Assert.AreEqual(personId, lending.Person.Id);
+        }
+
+        protected void AssertBookLent(LendingDto lending, int bookId, int personId)
+        {
+            AssertBookIsValid(lending, bookId, personId);
+            Assert.IsNotNull(lending.StartDate);
+            Assert.IsNull(lending.EndDate);
+        }
+
+        protected void AssertBookReturned(LendingDto lending, int bookId, int personId)
+        {
+            AssertBookIsValid(lending, bookId, personId);
+            Assert.IsNotNull(lending.StartDate);
+            Assert.IsNotNull(lending.EndDate);
+        }
+
+        protected void VerifyNoOtherCalls()
+        {
+            _mockBookRepository.VerifyNoOtherCalls();
+            _mockLendingRepository.VerifyNoOtherCalls();
+            _mockPersonRepository.VerifyNoOtherCalls();
+        }
+        
         protected void VerifyBookRepository_GetOne_IsCalled(int times)
         {
             _mockBookRepository.Verify(mock => mock.GetOne(It.IsAny<int>()), Times.Exactly(times));
