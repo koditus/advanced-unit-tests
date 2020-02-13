@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Services.DTOs;
+using Services.Interfaces;
+using Services.Models;
 
-namespace Services.Interfaces.Implementations
+namespace Services
 {
     public class LendingService : ILendingService
     {
@@ -11,21 +12,22 @@ namespace Services.Interfaces.Implementations
         private readonly IPersonRepository _personRepository;
 
         public LendingService(ILendingRepository lendingRepository,
-            IBookRepository bookRepository, IPersonRepository personRepository)
+            IBookRepository bookRepository,
+            IPersonRepository personRepository)
         {
             _lendingRepository = lendingRepository;
             _bookRepository = bookRepository;
             _personRepository = personRepository;
         }
 
-        public LendingDto Lend(int bookId, int personId)
+        public Lending Lend(int bookId, int personId)
         {
             var book = _bookRepository.GetOne(bookId);
-            if(book == null)
+            if (book == null)
                 throw new InvalidOperationException($"Book not found! BookId: {bookId}");
 
             var person = _personRepository.GetOne(personId);
-            if(person == null)
+            if (person == null)
                 throw new InvalidOperationException($"Person not found! PersonId: {personId}");
 
             var allLendings = _lendingRepository.GetAll();
@@ -33,9 +35,8 @@ namespace Services.Interfaces.Implementations
             if (lending != null && lending.EndDate == null)
                 throw new InvalidOperationException($"Book is already lent!");
 
-            var newLending = new LendingDto
+            var newLending = new Lending
             {
-                Id = allLendings.Length > 0 ? allLendings?.Last()?.Id ?? 0 + 1 : 1,
                 Book = book,
                 Person = person,
                 StartDate = DateTime.UtcNow
@@ -44,14 +45,14 @@ namespace Services.Interfaces.Implementations
             return newLending;
         }
 
-        public LendingDto Return(int bookId)
+        public Lending Return(int bookId)
         {
             var allLendings = _lendingRepository.GetAll();
             var lending = allLendings.FirstOrDefault(l => l.Book.Id == bookId && l.EndDate == null);
             if (lending == null)
                 throw new InvalidOperationException($"Book with id: {bookId} is not lent!");
 
-            if(lending.StartDate <= lending.EndDate)
+            if (lending.StartDate <= lending.EndDate)
                 throw new InvalidOperationException($"Book with id: {bookId} is not lent!");
 
             lending.EndDate = DateTime.UtcNow;

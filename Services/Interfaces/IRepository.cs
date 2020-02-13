@@ -1,6 +1,6 @@
 ﻿namespace Services.Interfaces
 {
-    public interface IRepository<TDto, TDao>
+    public interface IRepository<TDto>
     {
         TDto Add(TDto entityDto);
         TDto[] GetAll();

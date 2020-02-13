@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace UnitTests
 {
     [TestFixture]
-    public class ExampleFour : TestsBase
+    public class ExampleFour : LendingServiceTestsBase
     {
         [Test]
         [TestCase(InvalidBookId, ValidPersonId)]

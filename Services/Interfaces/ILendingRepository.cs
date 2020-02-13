@@ -1,9 +1,8 @@
-﻿using Services.DAOs;
-using Services.DTOs;
+﻿using Services.Models;
 
 namespace Services.Interfaces
 {
-    public interface ILendingRepository : IRepository<LendingDto, LendingDao>
+    public interface ILendingRepository : IRepository<Lending>
     {
     }
 }

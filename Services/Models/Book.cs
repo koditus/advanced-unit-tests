@@ -1,6 +1,6 @@
-﻿namespace Services.DTOs
+﻿namespace Services.Models
 {
-    public class BookDto : IDto
+    public class Book
     {
         public int Id { get; set; }
         public string Name { get; set; }

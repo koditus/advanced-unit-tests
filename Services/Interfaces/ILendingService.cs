@@ -1,10 +1,10 @@
-﻿using Services.DTOs;
+﻿using Services.Models;
 
 namespace Services.Interfaces
 {
     public interface ILendingService
     {
-        LendingDto Lend(int bookId, int personId);
-        LendingDto Return(int bookId);
+        Lending Lend(int bookId, int personId);
+        Lending Return(int bookId);
     }
 }

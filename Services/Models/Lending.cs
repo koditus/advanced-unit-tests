@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace Services.DTOs
+namespace Services.Models
 {
-    public class LendingDto : IDto
+    public class Lending
     {
         public int Id { get; set; }
-        public BookDto Book { get; set; }
-        public PersonDto Person { get; set; }
+        public Book Book { get; set; }
+        public Person Person { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
     }

@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace UnitTests
 {
     [TestFixture]
-    public class ExampleOne : TestsBase
+    public class ExampleOne : LendingServiceTestsBase
     {
         [Test]
         public void GivenValidBookAndPersonIds_WhenLendingBookToAPerson_ThenBookGetsLent()

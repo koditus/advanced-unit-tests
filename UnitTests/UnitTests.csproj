@@ -75,7 +75,7 @@
     <Compile Include="ExampleTwo.cs" />
     <Compile Include="ExampleSix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestsBase.cs" />
+    <Compile Include="LendingServiceTestsBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Services\Services.csproj">

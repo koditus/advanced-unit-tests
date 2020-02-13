@@ -1,11 +1,11 @@
 ﻿using System;
 using NUnit.Framework;
-using Services.DTOs;
+using Services.Models;
 
 namespace UnitTests
 {
     [TestFixture]
-    public class ExampleSix : TestsBase
+    public class ExampleSix : LendingServiceTestsBase
     {
         [Test]
         [Theory]
@@ -20,8 +20,8 @@ namespace UnitTests
                 LendingService.Return(ValidBookId);
 
             //Act
-            LendingDto lending = null;
-            LendingDto returnedLending = null;
+            Lending lending = null;
+            Lending returnedLending = null;
             if(isLending)
             {
                 if(isLent && !isReturned)

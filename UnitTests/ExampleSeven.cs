@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace UnitTests
 {
     [TestFixture]
-    public class ExampleSeven : TestsBase
+    public class ExampleSeven : LendingServiceTestsBase
     {
         [Test, Sequential]
         public void GivenInvalidBookOrPerson_WhenLending_ThenValidations(

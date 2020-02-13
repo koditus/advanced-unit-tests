@@ -1,9 +1,8 @@
-﻿using Services.DAOs;
-using Services.DTOs;
+﻿using Services.Models;
 
 namespace Services.Interfaces
 {
-    public interface IBookRepository : IRepository<BookDto, BookDao>
+    public interface IBookRepository : IRepository<Book>
     {
     }
 }

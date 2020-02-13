@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace UnitTests
 {
     [TestFixture]
-    public class ExampleThree : TestsBase
+    public class ExampleThree : LendingServiceTestsBase
     {
         [Test]
         public void GivenBookAlreadyLent_WhenReturning_ThenBookGetsReturned()

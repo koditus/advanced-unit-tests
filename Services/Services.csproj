@@ -41,18 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DAOs\BookDao.cs" />
-    <Compile Include="DAOs\LendingDao.cs" />
-    <Compile Include="DAOs\PersonDao.cs" />
-    <Compile Include="DTOs\BookDto.cs" />
-    <Compile Include="DTOs\IDto.cs" />
-    <Compile Include="DTOs\LendingDto.cs" />
-    <Compile Include="DTOs\PersonDto .cs" />
+    <Compile Include="Models\Book.cs" />
+    <Compile Include="Models\Lending.cs" />
+    <Compile Include="Models\Person.cs" />
     <Compile Include="Interfaces\IBookRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\ILendingRepository.cs" />
     <Compile Include="Interfaces\ILendingService.cs" />
-    <Compile Include="Interfaces\Implementations\LendingService.cs" />
+    <Compile Include="LendingService.cs" />
     <Compile Include="Interfaces\IPersonRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
