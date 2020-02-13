@@ -7,16 +7,16 @@ namespace UnitTests
     public class ExampleFour : TestsBase
     {
         [Test]
-        [TestCase(6, 1)]
-        [TestCase(1, 6)]
-        [TestCase(6, 6)]
+        [TestCase(InvalidBookId, ValidPersonId)]
+        [TestCase(ValidBookId, InvalidPersonId)]
+        [TestCase(InvalidBookId, InvalidPersonId)]
         public void GivenInvalidBookOrPersonIds_WhenLendingBookToAPerson_ThenGetException(int bookId, int personId)
         {
             //Arrange
 
             //Act / Assert
             Assert.Throws<InvalidOperationException>(() => LendingService.Lend(bookId, personId));
-            VerifyMocks(1, bookId == 6 ? 0 : 1, 0, 0, 0);
+            VerifyMocks(1, bookId == InvalidBookId ? 0 : 1, 0, 0, 0);
         }
     }
 }

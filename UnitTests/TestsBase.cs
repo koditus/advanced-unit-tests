@@ -18,12 +18,12 @@ namespace UnitTests
         protected Mock<ILendingRepository> MockLendingRepository;
         protected Mock<IBookRepository> MockBookRepository;
         protected Mock<IPersonRepository> MockPersonRepository;
-        protected int ValidBookId = 1;
-        protected int InvalidBookId = 6;
-        protected int ValidPersonId = 1;
-        protected int InvalidPersonId = 6;
-        protected int LentBookId = 7;
-        protected int ReturnedBookId = 8;
+        protected const int ValidBookId = 1;
+        protected const int InvalidBookId = 6;
+        protected const int ValidPersonId = 1;
+        protected const int InvalidPersonId = 6;
+        protected const int LentBookId = 7;
+        protected const int ReturnedBookId = 8;
 
         [SetUp]
         public void SetUp()

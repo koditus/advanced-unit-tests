@@ -8,7 +8,8 @@ namespace UnitTests
     {
         [Test, Sequential]
         public void GivenInvalidBookOrPerson_WhenLending_ThenValidations(
-            [Values(1, 6, 7, 8)] int bookId, [Values(6, 1, 1, 6)] int personId)
+            [Values(ValidBookId, InvalidBookId, LentBookId, ReturnedBookId)] int bookId, 
+            [Values(InvalidPersonId, ValidPersonId, ValidPersonId, InvalidPersonId)] int personId)
         {
             //Arrange
 
@@ -17,7 +18,8 @@ namespace UnitTests
         }
 
         [Test, Sequential]
-        public void GivenValidBookAndPerson_WhenLending_ThenLent([Values(1, 8)] int bookId, [Values(1, 1)] int personId)
+        public void GivenValidBookAndPerson_WhenLending_ThenLent([Values(ValidBookId, ReturnedBookId)] int bookId,
+            [Values(ValidPersonId, ValidPersonId)] int personId)
         {
             //Arrange
 
@@ -34,7 +36,7 @@ namespace UnitTests
         }
 
         [Test, Sequential]
-        public void GivenInvalidBooksForReturn_WhenReturning_ThenValidations([Values(1, 6, 8)] int bookId)
+        public void GivenInvalidBooksForReturn_WhenReturning_ThenValidations([Values(ValidBookId, InvalidBookId, ReturnedBookId)] int bookId)
         {
             //Arrange
 
@@ -43,7 +45,7 @@ namespace UnitTests
         }
 
         [Test, Sequential]
-        public void GivenLentBook_WhenReturning_ThenBookReturned([Values(7)] int bookId)
+        public void GivenLentBook_WhenReturning_ThenBookReturned([Values(LentBookId)] int bookId)
         {
             //Arrange
 

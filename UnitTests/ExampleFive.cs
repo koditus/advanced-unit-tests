@@ -7,20 +7,20 @@ namespace UnitTests
     public class ExampleFive : TestsBase
     {
         [Test]
-        [TestCase(6, 1)]
-        [TestCase(1, 6)]
-        [TestCase(6, 6)]
+        [TestCase(InvalidBookId, ValidPersonId)]
+        [TestCase(ValidBookId, InvalidPersonId)]
+        [TestCase(InvalidBookId, InvalidPersonId)]
         public void GivenInvalidBookOrPersonIds_WhenLendingBookToAPerson_ThenGetException(int bookId, int personId)
         {
             //Arrange
 
             //Act / Assert
             Assert.Throws<InvalidOperationException>(() => LendingService.Lend(bookId, personId));
-            VerifyMocks(1, bookId == 6 ? 0 : 1, 0, 0, 0);
+            VerifyMocks(1, bookId == InvalidBookId ? 0 : 1, 0, 0, 0);
         }
 
         [Test]
-        [TestCase(1, 1)]
+        [TestCase(ValidBookId, ValidPersonId)]
         public void GivenBookAndPersonIds_WhenLendingBookToAPerson_ThenLendsWithValidationChecks(int bookId,
             int personId)
         {
@@ -31,8 +31,8 @@ namespace UnitTests
 
             //Assert
             Assert.IsNotNull(lending);
-            Assert.AreEqual(1, lending.Book.Id);
-            Assert.AreEqual(1, lending.Person.Id);
+            Assert.AreEqual(ValidBookId, lending.Book.Id);
+            Assert.AreEqual(ValidPersonId, lending.Person.Id);
             VerifyMocks(1, 1, 1, 1, 0);
         }
     }
