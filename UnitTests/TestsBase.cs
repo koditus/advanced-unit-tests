@@ -12,12 +12,12 @@ namespace UnitTests
     {
         protected LendingService LendingService;
 
-        protected List<LendingDto> Lendings = new List<LendingDto>
+        private List<LendingDto> _lendings = new List<LendingDto>
             {new LendingDto {Book = new BookDto {Id = 7}, EndDate = null, Id = 1, Person = new PersonDto {Id = 1}}};
 
-        protected Mock<ILendingRepository> MockLendingRepository;
-        protected Mock<IBookRepository> MockBookRepository;
-        protected Mock<IPersonRepository> MockPersonRepository;
+        private Mock<ILendingRepository> _mockLendingRepository;
+        private Mock<IBookRepository> _mockBookRepository;
+        private Mock<IPersonRepository> _mockPersonRepository;
         protected const int ValidBookId = 1;
         protected const int InvalidBookId = 6;
         protected const int ValidPersonId = 1;
@@ -28,60 +28,75 @@ namespace UnitTests
         [SetUp]
         public void SetUp()
         {
-            MockLendingRepository = new Mock<ILendingRepository>();
-            MockLendingRepository.Setup(s => s.GetAll()).Returns(() => Lendings.ToArray());
-            MockLendingRepository.Setup(s => s.Add(It.IsAny<LendingDto>()))
-                .Callback<LendingDto>(l => Lendings.Add(l))
+            _mockLendingRepository = new Mock<ILendingRepository>();
+            _mockLendingRepository.Setup(s => s.GetAll()).Returns(() => _lendings.ToArray());
+            _mockLendingRepository.Setup(s => s.Add(It.IsAny<LendingDto>()))
+                .Callback<LendingDto>(l => _lendings.Add(l))
                 .Returns((LendingDto parameter) => parameter);
-            MockLendingRepository.Setup(s => s.Update(It.IsAny<LendingDto>()))
+            _mockLendingRepository.Setup(s => s.Update(It.IsAny<LendingDto>()))
                 .Callback<LendingDto>(parameter =>
                 {
-                    Lendings.RemoveAll(l => l.Id == parameter.Id);
-                    Lendings.Add(parameter);
+                    _lendings.RemoveAll(l => l.Id == parameter.Id);
+                    _lendings.Add(parameter);
                 })
-                .Returns<LendingDto>(parameter => Lendings.First(l => l.Id == parameter.Id));
+                .Returns<LendingDto>(parameter => _lendings.First(l => l.Id == parameter.Id));
 
-            MockBookRepository = new Mock<IBookRepository>();
-            MockBookRepository.Setup(s => s.GetOne(ValidBookId))
+            _mockBookRepository = new Mock<IBookRepository>();
+            _mockBookRepository.Setup(s => s.GetOne(ValidBookId))
                 .Returns((int parameter) => new BookDto {Id = parameter});
-            MockBookRepository.Setup(s => s.GetOne(LentBookId))
-                .Returns((int parameter) => new BookDto { Id = parameter });
-            MockBookRepository.Setup(s => s.GetOne(ReturnedBookId))
-                .Returns((int parameter) => new BookDto { Id = parameter });
-            MockBookRepository.Setup(s => s.GetOne(InvalidBookId))
+            _mockBookRepository.Setup(s => s.GetOne(LentBookId))
+                .Returns((int parameter) => new BookDto {Id = parameter});
+            _mockBookRepository.Setup(s => s.GetOne(ReturnedBookId))
+                .Returns((int parameter) => new BookDto {Id = parameter});
+            _mockBookRepository.Setup(s => s.GetOne(InvalidBookId))
                 .Returns<BookDto>(null);
 
-            MockPersonRepository = new Mock<IPersonRepository>();
-            MockPersonRepository.Setup(s => s.GetOne(ValidPersonId))
+            _mockPersonRepository = new Mock<IPersonRepository>();
+            _mockPersonRepository.Setup(s => s.GetOne(ValidPersonId))
                 .Returns((int parameter) => new PersonDto {Id = parameter});
-            MockPersonRepository.Setup(s => s.GetOne(InvalidPersonId))
+            _mockPersonRepository.Setup(s => s.GetOne(InvalidPersonId))
                 .Returns<PersonDto>(null);
 
-            LendingService = new LendingService(MockLendingRepository.Object, MockBookRepository.Object,
-                MockPersonRepository.Object);
+            LendingService = new LendingService(_mockLendingRepository.Object, _mockBookRepository.Object,
+                _mockPersonRepository.Object);
         }
 
         [TearDown]
         public void TearDown()
         {
             LendingService = null;
-            MockLendingRepository = null;
-            MockBookRepository = null;
-            MockPersonRepository = null;
-            Lendings = new List<LendingDto>
+            _mockLendingRepository = null;
+            _mockBookRepository = null;
+            _mockPersonRepository = null;
+            _lendings = new List<LendingDto>
                 {new LendingDto {Book = new BookDto {Id = 7}, EndDate = null, Id = 1, Person = new PersonDto {Id = 1}}};
         }
 
-        protected void VerifyMocks(int bookRepoCalledTimes, int personRepoCalledTimes, int lendingRepoGetAllCalledTimes,
-            int lendingRepoAddCalledTimes, int lendingRepoUpdateCalledTimes)
+        protected void VerifyBookRepository_GetOne_IsCalled(int times)
         {
-            MockBookRepository.Verify(mock => mock.GetOne(It.IsAny<int>()), Times.Exactly(bookRepoCalledTimes));
-            MockPersonRepository.Verify(mock => mock.GetOne(It.IsAny<int>()), Times.Exactly(personRepoCalledTimes));
-            MockLendingRepository.Verify(mock => mock.GetAll(), Times.Exactly(lendingRepoGetAllCalledTimes));
-            MockLendingRepository.Verify(mock => mock.Add(It.IsAny<LendingDto>()),
-                Times.Exactly(lendingRepoAddCalledTimes));
-            MockLendingRepository.Verify(mock => mock.Update(It.IsAny<LendingDto>()),
-                Times.Exactly(lendingRepoUpdateCalledTimes));
+            _mockBookRepository.Verify(mock => mock.GetOne(It.IsAny<int>()), Times.Exactly(times));
+        }
+
+        protected void VerifyPersonRepository_GetOne_IsCalled(int times)
+        {
+            _mockPersonRepository.Verify(mock => mock.GetOne(It.IsAny<int>()), Times.Exactly(times));
+        }
+
+        protected void VerifyLendingRepository_GetAll_IsCalled(int times)
+        {
+            _mockLendingRepository.Verify(mock => mock.GetAll(), Times.Exactly(times));
+        }
+
+        protected void VerifyLendingRepository_Add_IsCalled(int times)
+        {
+            _mockLendingRepository.Verify(mock => mock.Add(It.IsAny<LendingDto>()),
+                Times.Exactly(times));
+        }
+
+        protected void VerifyLendingRepository_Update_IsCalled(int times)
+        {
+            _mockLendingRepository.Verify(mock => mock.Update(It.IsAny<LendingDto>()),
+                Times.Exactly(times));
         }
     }
 }

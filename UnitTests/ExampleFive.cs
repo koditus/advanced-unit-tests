@@ -16,7 +16,11 @@ namespace UnitTests
 
             //Act / Assert
             Assert.Throws<InvalidOperationException>(() => LendingService.Lend(bookId, personId));
-            VerifyMocks(1, bookId == InvalidBookId ? 0 : 1, 0, 0, 0);
+            VerifyBookRepository_GetOne_IsCalled(1);
+            VerifyPersonRepository_GetOne_IsCalled(bookId == InvalidBookId ? 0 : 1);
+            VerifyLendingRepository_GetAll_IsCalled(0);
+            VerifyLendingRepository_Add_IsCalled(0);
+            VerifyLendingRepository_Update_IsCalled(0);
         }
 
         [Test]
@@ -33,7 +37,11 @@ namespace UnitTests
             Assert.IsNotNull(lending);
             Assert.AreEqual(ValidBookId, lending.Book.Id);
             Assert.AreEqual(ValidPersonId, lending.Person.Id);
-            VerifyMocks(1, 1, 1, 1, 0);
+            VerifyBookRepository_GetOne_IsCalled(1);
+            VerifyPersonRepository_GetOne_IsCalled(1);
+            VerifyLendingRepository_GetAll_IsCalled(1);
+            VerifyLendingRepository_Add_IsCalled(1);
+            VerifyLendingRepository_Update_IsCalled(0);
         }
     }
 }

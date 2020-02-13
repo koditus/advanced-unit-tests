@@ -28,7 +28,6 @@ namespace UnitTests
 
             //Assert
             Assert.IsNotNull(lending);
-            Assert.IsNotNull(lending);
             Assert.AreEqual(bookId, lending.Book.Id);
             Assert.AreEqual(personId, lending.Person.Id);
             Assert.IsNotNull(lending.StartDate);

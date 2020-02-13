@@ -16,7 +16,11 @@ namespace UnitTests
 
             //Assert
             Assert.Throws<InvalidOperationException>(() => LendingService.Lend(ValidBookId, ValidPersonId));
-            VerifyMocks(2, 2, 2, 1, 0);
+            VerifyBookRepository_GetOne_IsCalled(2);
+            VerifyPersonRepository_GetOne_IsCalled(2);
+            VerifyLendingRepository_GetAll_IsCalled(2);
+            VerifyLendingRepository_Add_IsCalled(1);
+            VerifyLendingRepository_Update_IsCalled(0);
         }
 
 
@@ -27,7 +31,11 @@ namespace UnitTests
 
             //Act / Assert
             Assert.Throws<InvalidOperationException>(() => LendingService.Lend(InvalidBookId, ValidPersonId));
-            VerifyMocks(1, 0, 0, 0, 0);
+            VerifyBookRepository_GetOne_IsCalled(1);
+            VerifyPersonRepository_GetOne_IsCalled(0);
+            VerifyLendingRepository_GetAll_IsCalled(0);
+            VerifyLendingRepository_Add_IsCalled(0);
+            VerifyLendingRepository_Update_IsCalled(0);
         }
 
         [Test]
@@ -37,7 +45,11 @@ namespace UnitTests
 
             //Act / Assert
             Assert.Throws<InvalidOperationException>(() => LendingService.Lend(ValidBookId, InvalidPersonId));
-            VerifyMocks(1, 1, 0, 0, 0);
+            VerifyBookRepository_GetOne_IsCalled(1);
+            VerifyPersonRepository_GetOne_IsCalled(1);
+            VerifyLendingRepository_GetAll_IsCalled(0);
+            VerifyLendingRepository_Add_IsCalled(0);
+            VerifyLendingRepository_Update_IsCalled(0);
         }
 
     }
