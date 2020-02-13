@@ -12,12 +12,12 @@ namespace UnitTests
     {
         protected LendingService LendingService;
 
-        private List<LendingDto> _lendings = new List<LendingDto>
-            {new LendingDto {Book = new BookDto {Id = 7}, EndDate = null, Id = 1, Person = new PersonDto {Id = 1}}};
+        private List<LendingDto> _lendings;
 
         private Mock<ILendingRepository> _mockLendingRepository;
         private Mock<IBookRepository> _mockBookRepository;
         private Mock<IPersonRepository> _mockPersonRepository;
+
         protected const int ValidBookId = 1;
         protected const int InvalidBookId = 6;
         protected const int ValidPersonId = 1;
@@ -28,6 +28,23 @@ namespace UnitTests
         [SetUp]
         public void SetUp()
         {
+            _lendings = new List<LendingDto>
+            {
+                new LendingDto
+                {
+                    Book = new BookDto
+                    {
+                        Id = LentBookId
+                    },
+                    EndDate = null,
+                    Id = 1,
+                    Person = new PersonDto
+                    {
+                        Id = ValidPersonId
+                    }
+                }
+            };
+
             _mockLendingRepository = new Mock<ILendingRepository>();
             _mockLendingRepository.Setup(s => s.GetAll()).Returns(() => _lendings.ToArray());
             _mockLendingRepository.Setup(s => s.Add(It.IsAny<LendingDto>()))
@@ -43,33 +60,22 @@ namespace UnitTests
 
             _mockBookRepository = new Mock<IBookRepository>();
             _mockBookRepository.Setup(s => s.GetOne(ValidBookId))
-                .Returns((int parameter) => new BookDto {Id = parameter});
+                .Returns((int parameter) => new BookDto { Id = parameter });
             _mockBookRepository.Setup(s => s.GetOne(LentBookId))
-                .Returns((int parameter) => new BookDto {Id = parameter});
+                .Returns((int parameter) => new BookDto { Id = parameter });
             _mockBookRepository.Setup(s => s.GetOne(ReturnedBookId))
-                .Returns((int parameter) => new BookDto {Id = parameter});
+                .Returns((int parameter) => new BookDto { Id = parameter });
             _mockBookRepository.Setup(s => s.GetOne(InvalidBookId))
                 .Returns<BookDto>(null);
 
             _mockPersonRepository = new Mock<IPersonRepository>();
             _mockPersonRepository.Setup(s => s.GetOne(ValidPersonId))
-                .Returns((int parameter) => new PersonDto {Id = parameter});
+                .Returns((int parameter) => new PersonDto { Id = parameter });
             _mockPersonRepository.Setup(s => s.GetOne(InvalidPersonId))
                 .Returns<PersonDto>(null);
 
             LendingService = new LendingService(_mockLendingRepository.Object, _mockBookRepository.Object,
                 _mockPersonRepository.Object);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            LendingService = null;
-            _mockLendingRepository = null;
-            _mockBookRepository = null;
-            _mockPersonRepository = null;
-            _lendings = new List<LendingDto>
-                {new LendingDto {Book = new BookDto {Id = 7}, EndDate = null, Id = 1, Person = new PersonDto {Id = 1}}};
         }
 
         protected void AssertBookIsValid(LendingDto lending, int bookId, int personId)
@@ -99,7 +105,7 @@ namespace UnitTests
             _mockLendingRepository.VerifyNoOtherCalls();
             _mockPersonRepository.VerifyNoOtherCalls();
         }
-        
+
         protected void VerifyBookRepository_GetOne_IsCalled(int times)
         {
             _mockBookRepository.Verify(mock => mock.GetOne(It.IsAny<int>()), Times.Exactly(times));
